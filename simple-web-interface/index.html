@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluencIA - AI Language Learning</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="styles.css?v=2.6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Floating Mascot Helper -->
+    <div class="floating-mascot" id="floating-mascot">
+        <img src="mascot.png" alt="FluencIA Helper" class="floating-mascot-image">
+        <div class="mascot-speech-bubble hidden" id="mascot-bubble">
+            <p id="mascot-message">Hi! I'm here to help! 👋</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <button id="theme-toggle" class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle dark mode">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            <button id="achievements-toggle" class="achievements-toggle-btn hidden" onclick="showAchievements()" title="View achievements">
+                <span class="achievements-icon">🏆</span>
+                <span id="achievements-new-badge" class="achievement-new-badge hidden">0</span>
+            </button>
+            <div class="logo-container">
+                <div class="mascot-icon">
+                    <img src="logo.png" alt="FluencIA Logo" class="mascot-image">
+                </div>
+                <h1>FluencIA</h1>
+            </div>
+            <p class="subtitle">Master Languages with AI-Powered Guidance</p>
+        </header>
+
+        <!-- Login Section -->
+        <div id="login-section" class="section">
+            <h2>Welcome Back</h2>
+            <div class="form-group">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password:</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="login-password" placeholder="Enter your password" onkeypress="handleLoginKeyPress(event)">
+                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password', event)" title="Toggle password visibility">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <button onclick="loginUser()" class="btn btn-primary">Login</button>
+            <p class="text-center">Don't have an account? <a href="#" onclick="showRegister()">Sign up here</a></p>
+        </div>
+
+        <!-- Register Section -->
+        <div id="register-section" class="section hidden">
+            <h2>Create Account</h2>
+            <div class="form-group">
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" placeholder="Choose a username (3-30 characters)">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password:</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="register-password" placeholder="Choose a password (min 8 characters)">
+                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('register-password', event)" title="Toggle password visibility">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="register-fullname">Full Name (optional):</label>
+                <input type="text" id="register-fullname" placeholder="Enter your full name">
+            </div>
+            <button onclick="registerUser()" class="btn btn-primary">Create Account</button>
+            <p class="text-center">Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+        </div>
+
+        <!-- Language Selection Section -->
+        <div id="language-selection-section" class="section hidden">
+            <div class="section-mascot">
+                <img src="mascot.png" alt="FluencIA Mascot" class="section-mascot-image">
+            </div>
+            <h2>Choose Your Language</h2>
+            <p class="subtitle">Which language would you like to learn?</p>
+            <div class="language-grid">
+                <div class="language-card" onclick="selectLanguage('Spanish')">
+                    <div class="language-flag">🇪🇸</div>
+                    <h3>Spanish</h3>
+                </div>
+                <div class="language-card" onclick="selectLanguage('French')">
+                    <div class="language-flag">🇫🇷</div>
+                    <h3>French</h3>
+                </div>
+                <div class="language-card" onclick="selectLanguage('German')">
+                    <div class="language-flag">🇩🇪</div>
+                    <h3>German</h3>
+                </div>
+                <div class="language-card" onclick="selectLanguage('Italian')">
+                    <div class="language-flag">🇮🇹</div>
+                    <h3>Italian</h3>
+                </div>
+                <div class="language-card" onclick="selectLanguage('Japanese')">
+                    <div class="language-flag">🇯🇵</div>
+                    <h3>Japanese</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Selection Section -->
+        <div id="level-selection-section" class="section hidden">
+            <h2>Choose Your Starting Point</h2>
+            <div class="divider">
+                <button onclick="startPlacementTest()" class="btn btn-primary" style="margin-bottom: 20px;">Take Placement Test (Recommended)</button>
+                <div style="text-align: center; margin: 20px 0; color: #666;">OR</div>
+                <p class="subtitle">Select your level manually:</p>
+            </div>
+            <div class="level-grid">
+                <div class="level-card" onclick="selectLevel('A1')">
+                    <h3>A1</h3>
+                    <p>Beginner</p>
+                </div>
+                <div class="level-card" onclick="selectLevel('A2')">
+                    <h3>A2</h3>
+                    <p>Elementary</p>
+                </div>
+                <div class="level-card" onclick="selectLevel('B1')">
+                    <h3>B1</h3>
+                    <p>Intermediate</p>
+                </div>
+                <div class="level-card" onclick="selectLevel('B2')">
+                    <h3>B2</h3>
+                    <p>Upper Intermediate</p>
+                </div>
+                <div class="level-card" onclick="selectLevel('C1')">
+                    <h3>C1</h3>
+                    <p>Advanced</p>
+                </div>
+                <div class="level-card" onclick="selectLevel('C2')">
+                    <h3>C2</h3>
+                    <p>Proficient</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placement Test Section -->
+        <div id="placement-test-section" class="section hidden">
+            <h2>Placement Test</h2>
+            <div class="test-progress">
+                <div class="progress-bar">
+                    <div id="test-progress-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="test-progress-text" class="progress-text">Question 0 of 18</div>
+            </div>
+            <div id="test-question-container" class="flashcard">
+                <div class="loading">Loading test...</div>
+            </div>
+            <div id="test-options-container" class="options-container hidden"></div>
+        </div>
+
+        <!-- Test Results Section -->
+        <div id="test-results-section" class="section hidden">
+            <div class="celebration-mascot">
+                <img src="mascot.png" alt="Fluently Mascot" class="celebration-mascot-image">
+            </div>
+            <h2>Test Results</h2>
+            <div class="results-card">
+                <div id="level-badge" class="level-badge"></div>
+                <div id="section-scores" class="section-scores"></div>
+                <div id="recommendations" class="recommendations"></div>
+                <button onclick="completeSetup()" class="btn btn-primary" style="margin-top: 20px;">Start Learning</button>
+                <button onclick="retakePlacementTest()" class="btn btn-secondary">Retake Test</button>
+            </div>
+        </div>
+
+        <!-- Module Selection -->
+        <div id="module-section" class="section hidden">
+            <h2>Choose a Module</h2>
+            <div class="module-grid">
+                <div class="module-card" onclick="startVocabulary()">
+                    <div class="module-icon">📚</div>
+                    <h3>Vocabulary</h3>
+                    <p>Learn new words with flashcards</p>
+                </div>
+                <div class="module-card" onclick="startConversation()">
+                    <div class="module-icon">💬</div>
+                    <h3>Conversation</h3>
+                    <p>Chat with AI tutor</p>
+                </div>
+                <div class="module-card" onclick="startGrammar()">
+                    <div class="module-icon">📖</div>
+                    <h3>Grammar</h3>
+                    <p>Practice grammar rules</p>
+                </div>
+                <div class="module-card" onclick="startWriting()">
+                    <div class="module-icon">✍️</div>
+                    <h3>Writing</h3>
+                    <p>Get feedback on your writing</p>
+                </div>
+                <div class="module-card" onclick="startPhonetics()">
+                    <div class="module-icon">🎤</div>
+                    <h3>Pronunciation</h3>
+                    <p>Practice speaking and get AI feedback.</p>
+                </div>
+            </div>
+            <button onclick="window.location.href='progress.html'" class="btn btn-primary">📊 My Progress</button>
+
+            <!-- Cheat Code Section (Hidden by default) -->
+            <div style="margin-top: 30px; text-align: center;">
+                <button onclick="toggleCheatCode()" class="btn btn-secondary" style="font-size: 0.8rem; padding: 8px 16px;">🎮 Demo Mode</button>
+                <div id="cheat-code-container" class="hidden" style="margin-top: 15px; background: #f8f9fa; padding: 20px; border-radius: 8px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    <p style="margin: 0 0 10px 0; font-size: 0.9rem; color: #666;">Enter demo code to unlock all progress:</p>
+                    <input type="text" id="cheat-code-input" placeholder="Enter code" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;">
+                    <button onclick="applyCheatCode()" class="btn btn-primary" style="width: 100%;">Apply Code</button>
+                    <div id="cheat-code-feedback" style="margin-top: 10px; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vocabulary Flashcard Section -->
+        <div id="vocabulary-section" class="section hidden">
+            <h2>📚 Vocabulary Practice</h2>
+
+            <!-- SRS Stats -->
+            <div id="srs-stats" class="srs-stats">
+                <div class="stat-card due">
+                    <div class="stat-number" id="due-count">-</div>
+                    <div class="stat-label">Due Now</div>
+                </div>
+                <div class="stat-card learning">
+                    <div class="stat-number" id="learning-count">-</div>
+                    <div class="stat-label">Learning</div>
+                </div>
+                <div class="stat-card mastered">
+                    <div class="stat-number" id="mastered-count">-</div>
+                    <div class="stat-label">Mastered</div>
+                </div>
+            </div>
+
+            <div id="flashcard" class="flashcard">
+                <div class="loading">Loading...</div>
+            </div>
+            <div id="options-container" class="options-container hidden"></div>
+            <div id="feedback" class="feedback hidden"></div>
+            <button onclick="backToModules()" class="btn btn-secondary">Back to Modules</button>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation-section" class="section hidden">
+            <h2>💬 Conversation Practice</h2>
+            <div id="topic-selector" class="topic-selector hidden">
+                <h3>Choose a Conversation Topic</h3>
+                <p class="subtitle-text">Select a topic to practice, or let the AI choose randomly</p>
+                <div class="topics-grid">
+                    <div class="topic-card" onclick="startConversationWithTopic('random')">
+                        <span class="topic-icon">🎲</span>
+                        <h4>Random Topic</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('travel')">
+                        <span class="topic-icon">✈️</span>
+                        <h4>Travel</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('food')">
+                        <span class="topic-icon">🍽️</span>
+                        <h4>Food & Dining</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('hobbies')">
+                        <span class="topic-icon">🎨</span>
+                        <h4>Hobbies</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('work')">
+                        <span class="topic-icon">💼</span>
+                        <h4>Work & Career</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('culture')">
+                        <span class="topic-icon">🎭</span>
+                        <h4>Culture</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('daily_life')">
+                        <span class="topic-icon">🏠</span>
+                        <h4>Daily Life</h4>
+                    </div>
+                    <div class="topic-card" onclick="startConversationWithTopic('education')">
+                        <span class="topic-icon">📚</span>
+                        <h4>Education</h4>
+                    </div>
+                </div>
+            </div>
+            <div id="chat-area" class="hidden">
+                <div id="current-topic-display" class="current-topic hidden">
+                    <span id="topic-name"></span>
+                    <button onclick="changeTopic()" class="btn-link">Change Topic</button>
+                </div>
+                <div id="chat-container" class="chat-container">
+                    <div class="loading">Starting conversation...</div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                    <button onclick="sendMessage()" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+            <button onclick="backToModules()" class="btn btn-secondary">Back to Modules</button>
+        </div>
+
+        <!-- Grammar Section -->
+        <div id="grammar-section" class="section hidden">
+            <h2>📖 Grammar Practice</h2>
+            <div id="grammar-question" class="flashcard">
+                <div class="loading">Loading question...</div>
+            </div>
+            <div id="grammar-options" class="options-container hidden"></div>
+            <div id="grammar-feedback" class="feedback hidden"></div>
+            <button onclick="backToModules()" class="btn btn-secondary">Back to Modules</button>
+        </div>
+
+        <!-- Writing Section -->
+        <div id="writing-section" class="section hidden">
+            <h2>✍️ Writing Practice</h2>
+            <div id="writing-prompt-selector" class="prompt-selector hidden">
+                <h3>Choose a Writing Topic</h3>
+                <p class="subtitle-text">Select a prompt that interests you, or write freely about any topic</p>
+                <div id="prompts-grid" class="prompts-grid"></div>
+                <button onclick="writeFreeForm()" class="btn btn-secondary" style="margin-top: 20px;">Write Without a Prompt</button>
+            </div>
+            <div id="writing-input-area" class="hidden">
+                <div id="selected-prompt-display" class="selected-prompt hidden">
+                    <h4 id="prompt-title"></h4>
+                    <p id="prompt-text"></p>
+                    <button onclick="showPromptSelector()" class="btn btn-link">Choose Different Topic</button>
+                </div>
+                <div class="form-group">
+                    <label for="writing-text">Write a sentence in <span id="writing-language">your target language</span>:</label>
+                    <textarea id="writing-text" rows="4" placeholder="Type your sentence here..."></textarea>
+                </div>
+                <button onclick="submitWriting()" class="btn btn-primary" id="submit-writing-btn">Get Feedback</button>
+                <div id="writing-loading" class="loading hidden">Processing your feedback</div>
+                <div id="writing-feedback" class="writing-feedback hidden"></div>
+            </div>
+            <button onclick="backToModules()" class="btn btn-secondary">Back to Modules</button>
+        </div>
+
+        <!-- User Info Display -->
+        <div id="user-info" class="user-info hidden">
+            <span id="user-display"></span>
+            <button onclick="logoutUser()" class="btn btn-secondary" style="margin-left: 10px; padding: 5px 15px; font-size: 0.9rem;">Logout</button>
+        </div>
+
+        <!-- Phonetics Section -->
+        <div id="phonetics-section" class="section hidden">
+            <h2>🎤 Pronunciation Practice</h2>
+
+            <div class="flashcard" style="text-align: center; display: block; padding: 30px 20px;">
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.95rem;">Read this phrase aloud:</p>
+                <div id="target-phrase" style="font-size: 1.6rem; font-weight: bold; color: #2c3e50; line-height: 1.4;">
+                    <div class="loading">Loading phrase...</div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; margin: 30px 0; gap: 15px;">
+
+                <button id="record-btn" onclick="toggleRecording()" class="btn" style="
+                    background-color: #e74c3c;
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    font-size: 2.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4);
+                    transition: transform 0.1s;
+                    border: none;
+                ">
+                    🎙️
+                </button>
+                <div id="record-status" style="color: #666; font-size: 1rem; font-weight: 500;">Tap microphone to record</div>
+
+                <audio id="audio-preview" controls style="display: none; width: 100%; max-width: 320px; margin-top: 10px;"></audio>
+
+                <button id="validate-btn" onclick="validatePronunciation()" class="btn btn-primary" style="width: 100%; max-width: 320px;" disabled>
+                    Validate Pronunciation
+                </button>
+            </div>
+
+            <div id="phonetics-feedback" class="feedback hidden" style="text-align: left;">
+                <div id="phonetics-main-feedback"></div>
+
+                <div id="phonetics-word-feedback" style="margin-top: 20px;"></div>
+
+                <button onclick="startPhonetics()" class="btn btn-primary" style="margin-top: 25px; width: 100%;">
+                    Next Practice
+                </button>
+            </div>
+
+            <button onclick="backToModules()" class="btn btn-secondary" style="margin-top: 20px;">Back to Modules</button>
+        </div>
+
+    </div>
+
+    <!-- Achievements Modal -->
+    <div id="achievements-modal" class="modal hidden">
+        <div class="modal-content achievements-modal-content">
+            <div class="modal-header">
+                <h2>🏆 Your Achievements</h2>
+                <button class="modal-close" onclick="closeAchievementsModal()">&times;</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="achievements-tabs">
+                <button class="tab-btn active" onclick="switchAchievementsTab('unlocked')">
+                    Unlocked <span id="unlocked-count" class="tab-count">0</span>
+                </button>
+                <button class="tab-btn" onclick="switchAchievementsTab('locked')">
+                    In Progress <span id="locked-count" class="tab-count">0</span>
+                </button>
+            </div>
+
+            <!-- Unlocked Tab -->
+            <div id="unlocked-tab" class="tab-content active">
+                <div id="unlocked-achievements" class="achievements-grid">
+                    <div class="empty-state">
+                        <p>Complete activities to unlock achievements!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locked Tab -->
+            <div id="locked-tab" class="tab-content hidden">
+                <div id="locked-achievements" class="achievements-grid">
+                    <div class="empty-state">
+                        <p>All achievements unlocked! 🎉</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js?v=19"></script>
+</body>
+</html>
