@@ -5,6 +5,7 @@ A comprehensive AI-powered language learning platform built with FastAPI and Goo
 ## Table of Contents
 
 - [Features](#features)
+- [Live Demo](#live-demo)
 - [System Architecture](#system-architecture)
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
@@ -65,6 +66,12 @@ A comprehensive AI-powered language learning platform built with FastAPI and Goo
 - Image generation with Imagen 3
 - Comprehensive error handling
 - CORS support for web clients
+
+## Live Demo
+
+You can try FluencIA online at: **https://fluencia.vercel.app**
+
+**Important Note:** The first page load may take 60-80 seconds as the server needs to wake up from sleep mode. Please be patient during the initial load. Once the server is active, the application will respond normally.
 
 ## System Architecture
 
@@ -160,6 +167,8 @@ VERTEX_AI_LOCATION=us-central1
 VERTEX_AI_CREDENTIALS_PATH=./credentials/your-service-account-key.json
 USE_VERTEX_AI=True
 ```
+
+**Important:** To enable the achievements functionality, ensure you're using `language_app.db` as shown above, not a test database. The achievements system requires the main production database to function properly.
 
 ### 3. Add Google Cloud Credentials
 
